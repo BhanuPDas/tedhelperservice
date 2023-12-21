@@ -64,7 +64,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -86,6 +85,7 @@
 				<configuration>
 					<projectVersionPolicyId>default</projectVersionPolicyId>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
+					<dryRun>true</dryRun>
 				</configuration>
 			</plugin>
 			<plugin>
