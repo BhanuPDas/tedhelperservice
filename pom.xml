@@ -21,7 +21,6 @@
 	<scm>
 		<connection>scm:git:https://git.inf.fh-dortmund.de/01/hanan001/tedhelperservice.git</connection>
 		<developerConnection>scm:git:https://git.inf.fh-dortmund.de/01/hanan001/tedhelperservice.git</developerConnection>
-		<tag>HEAD</tag>
 		<url>https://git.inf.fh-dortmund.de/01/hanan001/tedhelperservice</url>
 	</scm>
 	<dependencies>

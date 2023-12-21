@@ -1,4 +1,4 @@
-package com.rune;
+package com.rune.main;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
