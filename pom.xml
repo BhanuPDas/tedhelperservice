@@ -86,7 +86,7 @@
 				<version>3.0.1</version>
 				<configuration>
 					<projectVersionPolicyId>default</projectVersionPolicyId>
-					<tagNameFormat>v@{${project.version}}</tagNameFormat>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
 			<plugin>
