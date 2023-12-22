@@ -26,7 +26,8 @@ services:
   # ted simulator service
   ted-simulator:
      build:
-       context: ../json-server/Dockerfile
+       context: ../json-server/
+       dockerfile: Dockerfile
      ports:
        - "3000:3000"
      networks:
