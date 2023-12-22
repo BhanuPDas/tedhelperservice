@@ -10,7 +10,7 @@
 	<groupId>com.rune.tedHelperService</groupId>
 	<artifactId>tedHelperService</artifactId>
 	<version>0.2-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>tedHelperService</name>
 	<description>Spring Boot based Helper service to update data on TED</description>
 	<properties>
