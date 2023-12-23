@@ -1,0 +1,47 @@
+version: '3'
+services:
+  # Postgresql DB Image
+  db:
+    image: postgres:16.1
+    container_name: db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    restart: always
+    networks:
+      - app-network
+      
+  # ted helper service
+  java-app:
+    container_name: tedHelperService
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8050:8050"
+    environment:
+      - spring.datasource.url=${POSTGRESURL}
+      - spring.datasource.username=${POSTGRESUSER}
+      - spring.datasource.password=${POSTGRESPWD}  
+    depends_on:
+    - db
+    networks:
+      - app-network
+      
+  # ted simulator service
+  ted-simulator:
+     container_name: ted-simulator
+     build:
+       context: https://github.com/BhanuPDas/json-server.git
+       dockerfile: Dockerfile
+     ports:
+       - "3000:3000"
+     networks:
+       - app-network
+
+networks:
+  app-network:
+    driver: bridge
