@@ -1,4 +1,4 @@
-/*package com.rune;
+package com.rune;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,4 +10,4 @@ class TedHelperServiceApplicationTests {
 	void contextLoads() {
 	}
 
-} */
+}
