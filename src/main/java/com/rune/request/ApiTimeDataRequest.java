@@ -30,4 +30,6 @@ public class ApiTimeDataRequest implements Serializable{
 	@NotNull
 	private Activity activity;
 	private int[] expenses;
+	@NotNull
+	private long createdDate;
 }
