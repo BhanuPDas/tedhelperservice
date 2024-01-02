@@ -9,14 +9,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
+@Builder
 @Table(name = "TEDRequestsRepo")
 @Entity
-public class TEDHelperRepositoryImpl implements Serializable {
+public class TEDHelperRepoBean implements Serializable {
 
 	private static final long serialVersionUID = 4952412050331302998L;
 
@@ -34,6 +34,8 @@ public class TEDHelperRepositoryImpl implements Serializable {
 	private String request;
 	@Column(name = "response")
 	private String response;
+	@Column(name = "type")
+	private String type;
 	@Column(name = "error")
 	private String error;
 	@Column(name = "createdOn")

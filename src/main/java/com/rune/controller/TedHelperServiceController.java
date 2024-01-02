@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rune.request.ApiTimeDataRequest;
-import com.rune.response.ApiTimeDataResponse;
+import com.rune.request.TimeDataRequest;
+import com.rune.response.TimeDataResponse;
 import com.rune.service.TEDHelperService;
 
 import jakarta.validation.Valid;
@@ -28,16 +28,17 @@ public class TedHelperServiceController {
 	private ObjectMapper obj;
 	@Autowired
 	private TEDHelperService service;
-	private ApiTimeDataResponse response;
+	private TimeDataResponse response;
 
 	@PostMapping("/create-work-Time")
-	public ResponseEntity<ApiTimeDataResponse> addWorkTime(
+	public ResponseEntity<TimeDataResponse> addWorkTime(
 			@Valid @NotBlank @RequestHeader(name = "appName") String appName,
-			@Valid @RequestBody ApiTimeDataRequest timeDataRequest) {
+			@Valid @RequestBody TimeDataRequest timeDataRequest) {
 
 		try {
-			logger.info("Request received to create work time on TED \n {}", obj.writeValueAsString(timeDataRequest));
-			response = service.createTimesheet(appName, timeDataRequest);
+			response = service.processTimesheetRequest(appName, timeDataRequest);
+			logger.info("Request received to create work time on TED \n {} \n and response received \n {}",
+					obj.writeValueAsString(timeDataRequest), obj.writeValueAsString(response));
 		} catch (Exception e) {
 			logger.error("Error while parsing json.", e.getMessage());
 		}
@@ -45,13 +46,14 @@ public class TedHelperServiceController {
 	}
 
 	@PostMapping("/create-travel-Time")
-	public ResponseEntity<ApiTimeDataResponse> addTravelTime(
+	public ResponseEntity<TimeDataResponse> addTravelTime(
 			@Valid @NotBlank @RequestHeader(name = "appName") String appName,
-			@Valid @RequestBody ApiTimeDataRequest timeDataRequest) {
+			@Valid @RequestBody TimeDataRequest timeDataRequest) {
 
 		try {
-			logger.info("Request received to create travel time on TED \n {}", obj.writeValueAsString(timeDataRequest));
-			response = service.createTimesheet(appName, timeDataRequest);
+			response = service.processTimesheetRequest(appName, timeDataRequest);
+			logger.info("Request received to create travel time on TED \n {} \n and response received \n {}",
+					obj.writeValueAsString(timeDataRequest), obj.writeValueAsString(response));
 		} catch (Exception e) {
 			logger.error("Error while parsing json.", e.getMessage());
 		}
@@ -59,13 +61,14 @@ public class TedHelperServiceController {
 	}
 
 	@PostMapping("/create-break-Time")
-	public ResponseEntity<ApiTimeDataResponse> addBreakTime(
+	public ResponseEntity<TimeDataResponse> addBreakTime(
 			@Valid @NotBlank @RequestHeader(name = "appName") String appName,
-			@Valid @RequestBody ApiTimeDataRequest timeDataRequest) {
+			@Valid @RequestBody TimeDataRequest timeDataRequest) {
 
 		try {
-			logger.info("Request received to create break time on TED \n {}", obj.writeValueAsString(timeDataRequest));
-			response = service.createTimesheet(appName, timeDataRequest);
+			response = service.processTimesheetRequest(appName, timeDataRequest);
+			logger.info("Request received to create break time on TED \n {} \n and response received \n {}",
+					obj.writeValueAsString(timeDataRequest), obj.writeValueAsString(response));
 		} catch (Exception e) {
 			logger.error("Error while parsing json.", e.getMessage());
 		}

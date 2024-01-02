@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ApiTimeDataRequest implements Serializable{
+public class TimeDataRequest implements Serializable{
 
 	private static final long serialVersionUID = 5592996058911704307L;
 	

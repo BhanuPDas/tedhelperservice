@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Data
 @Builder
-public class ApiTimeDataResponse {
+public class TimeDataResponse {
 	
 	private String message;
 	private String error;
