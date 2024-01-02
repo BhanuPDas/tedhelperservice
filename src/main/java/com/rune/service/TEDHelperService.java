@@ -73,7 +73,7 @@ public class TEDHelperService {
 						.message("Travel Data has been successfully updated on TED").error(null).build();
 				TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(appName).appName2(APP_NAME2).error(null)
 						.createdOn(LocalDateTime.now()).request(obj.writeValueAsString(request))
-						.response(obj.writeValueAsString(response)).type("break").build();
+						.response(obj.writeValueAsString(response)).type("travel").build();
 				repository.save(bean);
 				return (response);
 			}
