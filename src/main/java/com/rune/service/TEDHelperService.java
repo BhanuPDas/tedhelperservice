@@ -1,6 +1,8 @@
 package com.rune.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rune.repository.TEDHelperRepoBean;
 import com.rune.repository.TEDHelperRepository;
-import com.rune.request.TEDUserRequest;
 import com.rune.request.TimeDataRequest;
 import com.rune.response.TEDUserResponse;
 import com.rune.response.TimeDataResponse;
@@ -99,22 +100,23 @@ public class TEDHelperService {
 
 	// Checks User exists else create user
 	private TEDUserResponse checkUserExist(String uuid) throws Exception {
-		String userUrl = tedUrl.append("/api/user").toString();
-		TEDUserRequest userRequest = TEDUserRequest.builder().userId(uuid).build();
+		String userUrl = tedUrl.append("/api/user/{uuId}").toString();
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("uuId", uuid);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<TEDUserRequest> userEntity = new HttpEntity<TEDUserRequest>(userRequest, headers);
+		HttpEntity userEntity = new HttpEntity(headers);
 		try {
-			ResponseEntity<TEDUserResponse> userResponse = template.exchange(userUrl, HttpMethod.POST, userEntity,
-					TEDUserResponse.class);
+			ResponseEntity<TEDUserResponse[]> userResponse = template.exchange(userUrl, HttpMethod.GET, userEntity,
+					TEDUserResponse[].class, param);
 			if (userResponse != null) {
 				logger.info("Request to check if user exists \n {} \n and response received \n {}",
-						obj.writeValueAsString(userRequest), obj.writeValueAsString(userResponse));
+						obj.writeValueAsString("{}"), obj.writeValueAsString(userResponse.getBody()[0]));
 				TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2).error(null)
-						.createdOn(LocalDateTime.now()).request(obj.writeValueAsString(userRequest))
-						.response(obj.writeValueAsString(userResponse.getBody())).type("user").build();
+						.createdOn(LocalDateTime.now()).request(obj.writeValueAsString("{}"))
+						.response(obj.writeValueAsString(userResponse.getBody()[0])).type("user").build();
 				repository.save(bean);
-				return userResponse.getBody();
+				return (userResponse.getBody()[0]);
 			} else {
 				// Create User;
 				return null;
@@ -122,7 +124,7 @@ public class TEDHelperService {
 		} catch (Exception ex) {
 			TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 					.error("Exception while getting user information").createdOn(LocalDateTime.now())
-					.request(obj.writeValueAsString(userRequest)).response(null).type("user").build();
+					.request(obj.writeValueAsString(userEntity.getBody())).response(null).type("user").build();
 			repository.save(bean);
 			throw new Exception("Exception while getting user information::: " + ex.getMessage());
 		}
