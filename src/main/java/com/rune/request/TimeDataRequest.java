@@ -14,8 +14,6 @@ public class TimeDataRequest implements Serializable{
 
 	private static final long serialVersionUID = 5592996058911704307L;
 	
-	@NotBlank
-	@NotNull
 	private String uuid;
 	@NotNull
 	private ZonedDateTime startDate;

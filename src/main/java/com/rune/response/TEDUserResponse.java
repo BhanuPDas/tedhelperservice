@@ -2,9 +2,11 @@ package com.rune.response;
 
 import java.time.LocalDateTime;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class TEDUserResponse {
 
 	private int id;
@@ -19,5 +21,6 @@ public class TEDUserResponse {
 	private LocalDateTime deactivationDate;
 	private String language;
 	private boolean companyOwner;
+	private String error;
 
 }
