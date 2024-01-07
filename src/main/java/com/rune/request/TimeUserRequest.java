@@ -2,13 +2,17 @@ package com.rune.request;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-public class TEDUserRequest {
-	
+@NoArgsConstructor
+@AllArgsConstructor
+public class TimeUserRequest {
+
 	private String firstName;
 	private String lastName;
 	private String userId;
@@ -20,5 +24,4 @@ public class TEDUserRequest {
 	private LocalDateTime deactivationDate;
 	private String language;
 	private boolean companyOwner;
-
 }

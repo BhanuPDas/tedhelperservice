@@ -5,16 +5,22 @@ import java.time.ZonedDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TimeDataRequest implements Serializable{
 
 	private static final long serialVersionUID = 5592996058911704307L;
-	
-	private String uuid;
+	@NotNull
+	private TimeUserRequest user;
 	@NotNull
 	private ZonedDateTime startDate;
 	@NotNull
@@ -24,10 +30,7 @@ public class TimeDataRequest implements Serializable{
 	private String type;
 	private int[] expenseIds;
 	@NotNull
-	private Project project;
+	private TimeProjectRequest project;
 	@NotNull
-	private Activity activity;
-	private int[] expenses;
-	@NotNull
-	private long createdDate;
+	private TimeActivityRequest activity;
 }

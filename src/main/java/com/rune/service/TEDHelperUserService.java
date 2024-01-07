@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.rune.request.TEDUserRequest;
+import com.rune.request.TimeUserRequest;
 
 /*
  * This class generates random user details from the static list.
@@ -15,7 +15,7 @@ import com.rune.request.TEDUserRequest;
 @Service
 public class TEDHelperUserService {
 
-	public TEDUserRequest createUser() {
+	public TimeUserRequest createUser() {
 
 		String[] firstNames = { "Andrew", "Bastian", "Teddy", "Dave", "Nady", "Daniel", "Harsha", "Nisha", "Robin",
 				"Neel" };
@@ -33,7 +33,7 @@ public class TEDHelperUserService {
 		LocalDateTime deactivationDate = null;
 		String language = "en-US";
 		boolean companyOwner = false;
-		TEDUserRequest userRequest = TEDUserRequest.builder().activated(activated).active(active)
+		TimeUserRequest userRequest = TimeUserRequest.builder().activated(activated).active(active)
 				.companyOwner(companyOwner).deactivationDate(deactivationDate).email(email).firstName(firstName)
 				.lastName(lastName).language(language).role(role).timeZone(timeZone).userId(userId).build();
 

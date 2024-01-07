@@ -30,7 +30,7 @@ public class TedHelperServiceController {
 	private TEDHelperService service;
 	private TimeDataResponse response;
 
-	@PostMapping("/create-work-Time")
+	@PostMapping("/create-work-time")
 	public ResponseEntity<TimeDataResponse> addWorkTime(
 			@Valid @NotBlank @RequestHeader(name = "appName") String appName,
 			@Valid @RequestBody TimeDataRequest timeDataRequest) {
@@ -45,7 +45,7 @@ public class TedHelperServiceController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/create-travel-Time")
+	@PostMapping("/create-travel-time")
 	public ResponseEntity<TimeDataResponse> addTravelTime(
 			@Valid @NotBlank @RequestHeader(name = "appName") String appName,
 			@Valid @RequestBody TimeDataRequest timeDataRequest) {
@@ -60,7 +60,7 @@ public class TedHelperServiceController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/create-break-Time")
+	@PostMapping("/create-break-time")
 	public ResponseEntity<TimeDataResponse> addBreakTime(
 			@Valid @NotBlank @RequestHeader(name = "appName") String appName,
 			@Valid @RequestBody TimeDataRequest timeDataRequest) {
