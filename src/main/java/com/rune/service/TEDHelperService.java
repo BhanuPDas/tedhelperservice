@@ -101,6 +101,7 @@ public class TEDHelperService {
 			}
 		} catch (Exception ex) {
 			logger.error("Error occured while creating timesheet", ex.getMessage());
+			ex.printStackTrace();
 			return (TimeDataResponse.builder().message(null)
 					.error("Error occured while creating timesheet. Please try again.").build());
 		}
@@ -141,6 +142,7 @@ public class TEDHelperService {
 					repository.save(bean);
 				}
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 						.error("Exception while creating timesheet information").createdOn(LocalDateTime.now())
 						.request(obj.writeValueAsString(timesheetEntity.getBody())).response(null).type("timesheet")
@@ -167,7 +169,7 @@ public class TEDHelperService {
 			try {
 				ResponseEntity<TEDUserResponse[]> userResponse = template.exchange(userUrl, HttpMethod.GET, userEntity,
 						TEDUserResponse[].class, param);
-				if (userResponse != null) {
+				if (userResponse.getBody() != null && userResponse.getBody().length!=0) {
 					logger.info("Request to check if user exists \n {} \n and response received \n {}",
 							obj.writeValueAsString("{}"), obj.writeValueAsString(userResponse.getBody()[0]));
 					TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
@@ -180,6 +182,7 @@ public class TEDHelperService {
 					return response;
 				}
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 						.error("Exception while getting user information").createdOn(LocalDateTime.now())
 						.request(obj.writeValueAsString("{}")).response(null).type("user").build();
@@ -207,7 +210,7 @@ public class TEDHelperService {
 		try {
 			ResponseEntity<TEDProjectResponse[]> projectResponse = template.exchange(projectUrl, HttpMethod.GET,
 					userEntity, TEDProjectResponse[].class);
-			if (projectResponse != null) {
+			if (projectResponse.getBody() != null && projectResponse.getBody().length!=0) {
 				for (TEDProjectResponse prjRes : projectResponse.getBody()) {
 					if (projectName.getName().equals(prjRes.getName()) && !projectFound) {
 						prj = Project.builder().id(prjRes.getId()).name(prjRes.getName()).color(prjRes.getColor())
@@ -250,6 +253,7 @@ public class TEDHelperService {
 				return practivity;
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 					.error("Exception while getting project information").createdOn(LocalDateTime.now())
 					.request(obj.writeValueAsString("{}")).response(null).type("project").build();
@@ -279,6 +283,7 @@ public class TEDHelperService {
 			}
 			return (userResponse.getBody());
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 					.error("Exception while creating user information").createdOn(LocalDateTime.now())
 					.request(obj.writeValueAsString(userEntity.getBody())).response(null).type("user").build();
@@ -310,6 +315,7 @@ public class TEDHelperService {
 			}
 			return (pro);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 					.error("Exception while creating project information").createdOn(LocalDateTime.now())
 					.request(obj.writeValueAsString(projectEntity.getBody())).response(null).type("project").build();
@@ -348,6 +354,7 @@ public class TEDHelperService {
 			updateProject(pro, act);
 			return (act);
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 					.error("Exception while creating activity information").createdOn(LocalDateTime.now())
 					.request(obj.writeValueAsString(activityEntity.getBody())).response(null).type("activity").build();
@@ -367,7 +374,7 @@ public class TEDHelperService {
 		try {
 			ResponseEntity<TEDProjectResponse[]> projectResponse = template.exchange(projectUrl, HttpMethod.GET,
 					projectEntity, TEDProjectResponse[].class, param);
-			if (projectResponse != null) {
+			if (projectResponse.getBody() != null && projectResponse.getBody().length!=0) {
 				logger.info("Request to fetch project \n {} \n and response received \n {}",
 						obj.writeValueAsString("{}"), obj.writeValueAsString(projectResponse.getBody()[0]));
 				TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2).error(null)
@@ -405,6 +412,7 @@ public class TEDHelperService {
 				}
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
 					.error("Exception while updating project information").createdOn(LocalDateTime.now())
 					.request(obj.writeValueAsString(projectEntity.getBody())).response(null).type("project").build();
