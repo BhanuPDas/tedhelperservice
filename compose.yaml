@@ -25,7 +25,8 @@ services:
     environment:
       - spring.datasource.url=${POSTGRESURL}
       - spring.datasource.username=${POSTGRESUSER}
-      - spring.datasource.password=${POSTGRESPWD}  
+      - spring.datasource.password=${POSTGRESPWD} 
+      - ted.url=${TEDURL} 
     depends_on:
     - db
     networks:
