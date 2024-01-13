@@ -1,7 +1,5 @@
 package com.rune.response;
 
-import java.time.ZonedDateTime;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,8 +10,8 @@ public class TimesheetResponse {
 	private int id;
 	private String owner;
 	private String ownerFullName;
-	private ZonedDateTime startDate;
-	private ZonedDateTime endDate;
+	private String startDate;
+	private String endDate;
 	private String timeZone;
 	private long createdDate;
 	private int[] expenses;

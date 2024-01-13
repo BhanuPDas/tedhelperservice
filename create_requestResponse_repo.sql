@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS tedrequests_repo (id serial not null, app_name_1 varchar(255) not null, app_name_2 varchar(255) not null, created_on timestamp(6) not null, error varchar(255), request varchar(1000), response varchar(1000), type varchar(255), primary key (id));
+COMMIT;

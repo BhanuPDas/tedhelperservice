@@ -1,7 +1,5 @@
 package com.rune.request;
 
-import java.time.ZonedDateTime;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,8 +9,8 @@ public class TimesheetRequest {
 
 	private String owner;
 	private String ownerFullName;
-	private ZonedDateTime startDate;
-	private ZonedDateTime endDate;
+	private String startDate;
+	private String endDate;
 	private StatusRequest status;
 	private String timeZone;
 	private TimesheetProjectRequest project;

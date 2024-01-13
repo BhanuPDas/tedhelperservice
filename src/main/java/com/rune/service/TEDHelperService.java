@@ -2,6 +2,7 @@ package com.rune.service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,8 +64,6 @@ public class TEDHelperService {
 	private RestTemplate template;
 	@Autowired
 	private TEDHelperRepository repository;
-	@Autowired
-	private TEDHelperUserService simUser;
 	@Value("${ted.url}")
 	private String tedUrl;
 
@@ -109,7 +108,7 @@ public class TEDHelperService {
 
 	private void createTimesheet(TimeDataRequest request) throws Exception {
 		try {
-			TEDUserResponse user = checkUserExist(request.getUser().getUserId());
+			TEDUserResponse user = checkUserExist(request);
 			ProjectActivity prActivity = checkProjectExist(request.getProject(), request.getActivity());
 			StatusRequest status = StatusRequest.builder().name("pending").build();
 			TimesheetActivityRequest act = TimesheetActivityRequest.builder().id(prActivity.getActivity().getId())
@@ -119,11 +118,13 @@ public class TEDHelperService {
 			TimesheetProjectRequest pro = TimesheetProjectRequest.builder().id(prActivity.getProject().getId())
 					.name(prActivity.getProject().getName()).color(prActivity.getProject().getColor())
 					.tags(prActivity.getProject().getTags()).build();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+			String startDate = request.getStartDate().format(formatter);
+			String endDate = request.getEndDate().format(formatter);
 			TimesheetRequest timesheetRequest = TimesheetRequest.builder().owner(user.getUserId())
-					.ownerFullName(user.getFirstName() + " " + user.getLastName()).startDate(request.getStartDate())
-					.endDate(request.getEndDate()).timeZone(user.getTimeZone()).status(status)
-					.expenseIds(request.getExpenseIds()).createdDate(Instant.now().toEpochMilli()).activity(act)
-					.project(pro).build();
+					.ownerFullName(user.getFirstName() + " " + user.getLastName()).startDate(startDate).endDate(endDate)
+					.timeZone(user.getTimeZone()).status(status).expenseIds(request.getExpenseIds())
+					.createdDate(Instant.now().toEpochMilli()).activity(act).project(pro).build();
 			String timesheetUrl = tedUrl.concat("/api/timesheets");
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -158,18 +159,19 @@ public class TEDHelperService {
 
 	// Checks User exists else create user
 	@SuppressWarnings("all")
-	private TEDUserResponse checkUserExist(String userId) throws Exception {
-		if (userId != null && !userId.isBlank()) {
+	private TEDUserResponse checkUserExist(TimeDataRequest request) throws Exception {
+		TEDUserResponse response = null;
+		if (request.getUser().getUserId() != null && !request.getUser().getUserId().isBlank()) {
 			String userUrl = tedUrl.concat("/api/user/{uuId}");
 			Map<String, String> param = new HashMap<String, String>();
-			param.put("uuId", userId);
+			param.put("uuId", request.getUser().getUserId());
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity userEntity = new HttpEntity(headers);
 			try {
 				ResponseEntity<TEDUserResponse[]> userResponse = template.exchange(userUrl, HttpMethod.GET, userEntity,
 						TEDUserResponse[].class, param);
-				if (userResponse.getBody() != null && userResponse.getBody().length!=0) {
+				if (userResponse.getBody() != null && userResponse.getBody().length != 0) {
 					logger.info("Request to check if user exists \n {} \n and response received \n {}",
 							obj.writeValueAsString("{}"), obj.writeValueAsString(userResponse.getBody()[0]));
 					TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2)
@@ -178,7 +180,7 @@ public class TEDHelperService {
 					repository.save(bean);
 					return (userResponse.getBody()[0]);
 				} else {
-					TEDUserResponse response = createUserInTed();
+					response = createUserInTed(request);
 					return response;
 				}
 			} catch (Exception ex) {
@@ -189,10 +191,8 @@ public class TEDHelperService {
 				repository.save(bean);
 				throw new Exception("Exception while getting user information::: " + ex.getMessage());
 			}
-		} else {
-			TEDUserResponse response = createUserInTed();
-			return response;
 		}
+		return response;
 	}
 
 	// Checks Project exists else create project
@@ -210,7 +210,7 @@ public class TEDHelperService {
 		try {
 			ResponseEntity<TEDProjectResponse[]> projectResponse = template.exchange(projectUrl, HttpMethod.GET,
 					userEntity, TEDProjectResponse[].class);
-			if (projectResponse.getBody() != null && projectResponse.getBody().length!=0) {
+			if (projectResponse.getBody() != null && projectResponse.getBody().length != 0) {
 				for (TEDProjectResponse prjRes : projectResponse.getBody()) {
 					if (projectName.getName().equals(prjRes.getName()) && !projectFound) {
 						prj = Project.builder().id(prjRes.getId()).name(prjRes.getName()).color(prjRes.getColor())
@@ -263,8 +263,13 @@ public class TEDHelperService {
 
 	}
 
-	private TEDUserResponse createUserInTed() throws Exception {
-		TimeUserRequest userRequest = simUser.createUser();
+	private TEDUserResponse createUserInTed(TimeDataRequest request) throws Exception {
+		TimeUserRequest userRequest = TimeUserRequest.builder().firstName(request.getUser().getFirstName())
+				.lastName(request.getUser().getLastName()).activated(request.getUser().isActivated())
+				.active(request.getUser().isActive()).companyOwner(request.getUser().isCompanyOwner())
+				.deactivationDate(request.getUser().getDeactivationDate()).email(request.getUser().getEmail())
+				.role(request.getUser().getRole()).timeZone(request.getUser().getTimeZone())
+				.userId(request.getUser().getUserId()).language(request.getUser().getLanguage()).build();
 		String userUrl = tedUrl.concat("/api/user/create").toString();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -374,7 +379,7 @@ public class TEDHelperService {
 		try {
 			ResponseEntity<TEDProjectResponse[]> projectResponse = template.exchange(projectUrl, HttpMethod.GET,
 					projectEntity, TEDProjectResponse[].class, param);
-			if (projectResponse.getBody() != null && projectResponse.getBody().length!=0) {
+			if (projectResponse.getBody() != null && projectResponse.getBody().length != 0) {
 				logger.info("Request to fetch project \n {} \n and response received \n {}",
 						obj.writeValueAsString("{}"), obj.writeValueAsString(projectResponse.getBody()[0]));
 				TEDHelperRepoBean bean = TEDHelperRepoBean.builder().appName1(APP_NAME1).appName2(APP_NAME2).error(null)
