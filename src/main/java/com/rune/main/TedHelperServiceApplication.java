@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.rune.dto.UserDetails;
 
 @SpringBootApplication
 @EnableJpaRepositories(value = "com.rune")
@@ -36,4 +37,10 @@ public class TedHelperServiceApplication {
 		return obj;
 	}
 
+	@Bean(autowireCandidate = true)
+	@Scope("singleton")
+	public UserDetails createUserObject() {
+		UserDetails user = new UserDetails();
+		return user;
+	}
 }

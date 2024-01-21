@@ -8,9 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Builder
@@ -19,8 +17,6 @@ import lombok.Setter;
 public class TimeDataRequest implements Serializable{
 
 	private static final long serialVersionUID = 5592996058911704307L;
-	@NotNull
-	private TimeUserRequest user;
 	@NotNull
 	private ZonedDateTime startDate;
 	@NotNull

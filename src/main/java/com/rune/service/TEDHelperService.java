@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rune.dto.Activity;
 import com.rune.dto.Project;
 import com.rune.dto.ProjectActivity;
+import com.rune.dto.UserDetails;
 import com.rune.repository.TEDHelperRepoBean;
 import com.rune.repository.TEDHelperRepository;
 import com.rune.request.StatusRequest;
@@ -64,6 +65,8 @@ public class TEDHelperService {
 	private RestTemplate template;
 	@Autowired
 	private TEDHelperRepository repository;
+	@Autowired
+	private UserDetails user;
 	@Value("${ted.url}")
 	private String tedUrl;
 
@@ -161,10 +164,10 @@ public class TEDHelperService {
 	@SuppressWarnings("all")
 	private TEDUserResponse checkUserExist(TimeDataRequest request) throws Exception {
 		TEDUserResponse response = null;
-		if (request.getUser().getUserId() != null && !request.getUser().getUserId().isBlank()) {
+		if (user.getUserId() != null && !user.getUserId().isBlank()) {
 			String userUrl = tedUrl.concat("/api/user/{uuId}");
 			Map<String, String> param = new HashMap<String, String>();
-			param.put("uuId", request.getUser().getUserId());
+			param.put("uuId", user.getUserId());
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity userEntity = new HttpEntity(headers);
@@ -264,12 +267,12 @@ public class TEDHelperService {
 	}
 
 	private TEDUserResponse createUserInTed(TimeDataRequest request) throws Exception {
-		TimeUserRequest userRequest = TimeUserRequest.builder().firstName(request.getUser().getFirstName())
-				.lastName(request.getUser().getLastName()).activated(request.getUser().isActivated())
-				.active(request.getUser().isActive()).companyOwner(request.getUser().isCompanyOwner())
-				.deactivationDate(request.getUser().getDeactivationDate()).email(request.getUser().getEmail())
-				.role(request.getUser().getRole()).timeZone(request.getUser().getTimeZone())
-				.userId(request.getUser().getUserId()).language(request.getUser().getLanguage()).build();
+		TimeUserRequest userRequest = TimeUserRequest.builder().firstName(user.getFirstName())
+				.lastName(user.getLastName()).activated(user.isActivated())
+				.active(user.isActive()).companyOwner(user.isCompanyOwner())
+				.deactivationDate(user.getDeactivationDate()).email(user.getEmail())
+				.role(user.getRole()).timeZone(user.getTimeZone())
+				.userId(user.getUserId()).language(user.getLanguage()).build();
 		String userUrl = tedUrl.concat("/api/user/create").toString();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

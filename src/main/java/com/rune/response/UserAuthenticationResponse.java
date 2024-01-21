@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeDataResponse {
-	
-	private String message;
-	private String error;
+public class UserAuthenticationResponse {
+
+	private String status;
+	private UserContentResponse[] content;
 }

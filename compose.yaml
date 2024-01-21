@@ -26,7 +26,8 @@ services:
       - spring.datasource.url=${POSTGRESURL}
       - spring.datasource.username=${POSTGRESUSER}
       - spring.datasource.password=${POSTGRESPWD} 
-      - ted.url=${TEDURL} 
+      - ted.url=${TEDURL}
+      - providerservice.url=${PROVIDERURL}
     depends_on:
     - db
     networks:
